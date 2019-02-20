@@ -1,0 +1,50 @@
+import random
+
+def search(word, letter):
+    List = []
+    for i in range(len(word)):
+        if word[i] == letter:
+            List.append(i)
+    return List
+
+
+List_of_Words = {0: 'goodnight', 1: 'welcome', 2: 'advice',
+                 3: 'future', 4: 'achievement', 5: 'check',
+                 6: 'mystic', 7: 'physics', 8: 'slippery'}
+
+n = random.randint(0, 8)
+riddle = List_of_Words[n]
+secret = len(riddle) * '*'
+mistake = 0
+guessed = set()
+
+while mistake != 5 or secret == riddle:
+    print('Guess a letter:')
+    guess = input()
+    if len(guess) > 1:
+        print('You can enter only 1 letter', '\n')
+    else:
+        if guess in guessed:
+            print('This letter has already been', '\n')
+        elif guess not in guessed:
+            if guess in riddle:
+                if riddle.count(guess) == 1:
+                    ind_g = riddle.index(guess)
+                    secret = secret[:ind_g] + guess + secret[ind_g + 1:]
+                else:
+                    List_g = search(riddle, guess)
+                    for now in List_g:
+                        ind_g = now
+                        secret = secret[:ind_g] + guess + secret[ind_g + 1:]
+                print('Hit!', '\n')
+                print('The word:', secret, '\n')
+                guessed.add(guess)
+            else:
+                mistake += 1
+                print('Missed, mistake', mistake, 'out of 5', '\n')
+                print('The word:', secret, '\n')
+            if mistake == 5:
+                print('You lost!')
+            elif secret == riddle:
+                print('You won!')
+                break
